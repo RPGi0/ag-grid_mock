@@ -4,8 +4,8 @@
     class="ag-theme-balham"
     :columnDefs="columnDefs"
     :rowData="rowData"
+    rowSelection="multiple"
   >
-
   </ag-grid-vue>
 </template>
 
@@ -25,16 +25,30 @@ export default {
   },
   beforeMount () {
     this.columnDefs = [
-      { headerName: 'Make', field: 'make', sortable: true, filter: true },
-      { headerName: 'Model', field: 'model', sortable: true, filter: true },
-      { headerName: 'Price', field: 'price', sortable: true, filter: true }
+      {
+        headerName: 'Make',
+        field: 'make',
+        sortable: true,
+        filter: true,
+        checkboxSelection: true
+      },
+      {
+        headerName: 'Model',
+        field: 'model',
+        sortable: true,
+        filter: true
+      },
+      {
+        headerName: 'Price',
+        field: 'price',
+        sortable: true,
+        filter: true
+      }
     ]
 
-    this.rowData = [
-      { make: 'Toyota', model: 'Celica', price: 35000 },
-      { make: 'Ford', model: 'Mondeo', price: 32000 },
-      { make: 'Porche', model: 'Boxter', price: 72000 }
-    ]
+    fetch('https://api.myjson.com/bins/15psn9')
+      .then(result => result.json())
+      .then((rowData) => { this.rowData = rowData })
   }
 }
 </script>
