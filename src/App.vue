@@ -1,12 +1,16 @@
 <template>
-  <ag-grid-vue
-    style="width: 500px; height: 500px"
-    class="ag-theme-balham"
-    :columnDefs="columnDefs"
-    :rowData="rowData"
-    rowSelection="multiple"
-  >
-  </ag-grid-vue>
+  <div>
+    <button @click="getSelectedRows()">Get Selected Rows</button>
+
+    <ag-grid-vue
+      style="width: 500px; height: 500px"
+      class="ag-theme-balham"
+      :columnDefs="columnDefs"
+      :rowData="rowData"
+      rowSelection="multiple"
+      @grid-ready="onGridReady">
+    </ag-grid-vue>
+  </div>
 </template>
 
 <script>
@@ -22,6 +26,20 @@ export default {
   },
   components: {
     AgGridVue
+  },
+  methods: {
+    onGridReady (params) {
+      this.gridApi = params.api
+      this.columnApi = params.columnApi
+    },
+    getSelectedRows () {
+      const selectedNodes = this.gridApi.getSelectedNodes()
+      const selectedData = selectedNodes.map(node => node.data)
+      const selectedDataStringPresentation = selectedData
+        .map(node => node.make + ' ' + node.model)
+        .join(',')
+      alert(`Selected Nodes: ${selectedDataStringPresentation}`)
+    }
   },
   beforeMount () {
     this.columnDefs = [
