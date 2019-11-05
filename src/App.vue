@@ -25,9 +25,9 @@ export default {
   },
   beforeMount () {
     this.columnDefs = [
-      { headerName: 'Make', field: 'make' },
-      { headerName: 'Model', field: 'model' },
-      { headerName: 'Price', field: 'price' }
+      { headerName: 'Make', field: 'make', sortable: true, filter: true },
+      { headerName: 'Model', field: 'model', sortable: true, filter: true },
+      { headerName: 'Price', field: 'price', sortable: true, filter: true }
     ]
 
     this.rowData = [
