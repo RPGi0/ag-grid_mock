@@ -1,13 +1,13 @@
 <template>
   <div>
     <button @click="getSelectedRows()">Get Selected Rows</button>
-
     <ag-grid-vue
-      style="width: 500px; height: 500px"
+      style="width: 500px; height: 500px;"
       class="ag-theme-balham"
       :columnDefs="columnDefs"
       :rowData="rowData"
       rowSelection="multiple"
+
       @grid-ready="onGridReady">
     </ag-grid-vue>
   </div>
@@ -21,7 +21,10 @@ export default {
   data () {
     return {
       columnDefs: null,
-      rowData: null
+      rowData: null,
+      gridApi: null,
+      columnApi: null,
+      autoGroupColumnDef: null
     }
   },
   components: {
@@ -37,32 +40,26 @@ export default {
       const selectedData = selectedNodes.map(node => node.data)
       const selectedDataStringPresentation = selectedData
         .map(node => node.make + ' ' + node.model)
-        .join(',')
-      alert(`Selected Nodes: ${selectedDataStringPresentation}`)
+        .join(', ')
+
+      alert(`Selected nodes: ${selectedDataStringPresentation}`)
     }
   },
   beforeMount () {
     this.columnDefs = [
-      {
-        headerName: 'Make',
-        field: 'make',
-        sortable: true,
-        filter: true,
-        checkboxSelection: true
-      },
-      {
-        headerName: 'Model',
-        field: 'model',
-        sortable: true,
-        filter: true
-      },
-      {
-        headerName: 'Price',
-        field: 'price',
-        sortable: true,
-        filter: true
-      }
+      { headerName: 'Make', field: 'make', rowGroup: true },
+      { headerName: 'Model', field: 'model' },
+      { headerName: 'Price', field: 'price' }
     ]
+
+    this.autoGroupColumnDef = {
+      headerName: 'Model',
+      field: 'model',
+      cellRenderer: 'agGroupCellRenderer',
+      cellRendererParams: {
+        checkbox: true
+      }
+    }
 
     fetch('https://api.myjson.com/bins/15psn9')
       .then(result => result.json())
@@ -71,7 +68,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style>
 @import "../node_modules/ag-grid-community/dist/styles/ag-grid.css";
 @import "../node_modules/ag-grid-community/dist/styles/ag-theme-balham.css";
 
